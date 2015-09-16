@@ -45,10 +45,12 @@ namespace libProxer
 
         private bool _loggedIn = false;
         private string _uid;
+        private string _sessionCookie;
 
         public Account(string _userName)
         {
             userName = _userName;
+            _sessionCookie = "";
         }
 
         /**
@@ -63,7 +65,7 @@ namespace libProxer
             postParameter.Add("password", password);
 
             string jsonResponse = Network.loadURLPost("https://proxer.me/login?format=json&action=login", postParameter,
-                null);
+                null, out _sessionCookie);
 
             // Antwort auswerten
             LoginResponse antwort = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
@@ -92,7 +94,7 @@ namespace libProxer
         {
             if (forceOnline)
             {
-                string jsonResponse = Network.loadURL("https://proxer.me/login?format=json&action=login", null);
+                string jsonResponse = Network.loadURLPost("https://proxer.me/login?format=json&action=login", null, _sessionCookie);
 
                 // Antwort aus JSON zurückwandeln
                 LoginResponse antwort = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
@@ -112,6 +114,8 @@ namespace libProxer
          */
         public bool logout()
         {
+            // todo: Etwas machen hier^^
+            _sessionCookie = null;
             return true;
         }
 
@@ -122,7 +126,7 @@ namespace libProxer
          */
         public bool updateNotifications()
         {
-            string response = Network.loadURL("https://proxer.me/notifications?format=raw&s=count");
+            string response = Network.loadURL("https://proxer.me/notifications?format=raw&s=count", _sessionCookie);
 
             // Ein Fehler ist aufgetreten, die Sitzung ist nicht mehr gültig!
             if (response == "1")

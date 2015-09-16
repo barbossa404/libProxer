@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace libProxer
@@ -21,11 +22,22 @@ namespace libProxer
             return loadURLPost(url, null, sessionCookie);
         }
 
-        public static string loadURLPost(string url, Dictionary<string,string> postParams, string sessionCookie = null)
+        public static string loadURL(string url, string sessionCookie, out string newSessionCookie)
+        {
+            return loadURLPost(url, null, sessionCookie, out newSessionCookie);
+        }
+
+        public static string loadURLPost(string url, Dictionary<string, string> postParams, string sessionCookie = null)
+        {
+            string cookie;
+            return loadURLPost(url, postParams, sessionCookie, out cookie);
+        }
+
+        public static string loadURLPost(string url, Dictionary<string,string> postParams, string sessionCookie, out string newSessionCookie)
         {
             // Request erzeugen
             HttpWebRequest http = (HttpWebRequest)HttpWebRequest.Create(url);
-
+            
             // Wenn es einen Cookie gibt, setzen wir ihn
             if (sessionCookie != null)
                 http.Headers[HttpRequestHeader.Cookie] = sessionCookie;
@@ -45,7 +57,7 @@ namespace libProxer
                 byte[] dataBytes = StringToAscii(postParamBuilder.ToString());
                 //http.Headers["Content-Length"] = dataBytes.Length.ToString();
                 // todo: remove or fix
-                
+
 
                 // Signalisieren, dass wir Daten mit POST hochladen wollen
                 http.Method = "POST";
@@ -56,19 +68,24 @@ namespace libProxer
                 if (requestStreamAsync.Wait(1000) == false)
                     throw new IOException("Failed to send request for url " + url);
 
-                var requestStream = (Stream)requestStreamAsync.Result;
+                var requestStream = (Stream) requestStreamAsync.Result;
 
                 // Daten senden
                 requestStream.Write(dataBytes, 0, dataBytes.Length);
                 requestStream.Flush();
                 requestStream.Dispose();
             }
+            else
+                http.Method = "GET";
 
             // Antwort des Servers erfassen. Benutzung der Asynchronen-Methoden erforderlich um Kompabilität
             // zu allen Zielplattformen aufrechtzuerhalten
             var asyncResponse = http.GetResponseAsync();
             if (asyncResponse.Wait(1000) == false)
                 throw new IOException("No response for url " + url);
+
+            // Cookie zurückliefern
+            newSessionCookie = asyncResponse.Result.Headers["Set-Cookie"];
 
             // String lesen und zurückliefern
             using (StreamReader sr = new StreamReader(asyncResponse.Result.GetResponseStream()))

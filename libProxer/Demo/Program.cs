@@ -20,7 +20,7 @@ namespace Demo
          * NIEMALS JEMALS AUCH NUR DRAN DENKEN EIN PASSWORT IM KLARTEXT HIER ZU PLATZIEREN!
          */
         public const string userName = "Test";
-        public const string password = "das-passwort-von-test";
+        public const string password = "passwort für test";
 
         static void Main(string[] args)
         {
@@ -42,6 +42,10 @@ namespace Demo
             // 60 Minuten ablaufen. Allerdings ist ein explizites Abmelden nie eine schlechte Idee, also bleibt hier die Möglichkeit.
             nutzer.logout();
 
+            if (!nutzer.updateNotifications())
+                Console.WriteLine("Ungelesene Nachrichten verfügbar!");
+            if (nutzer.notifications.news > 0)
+                Console.WriteLine("Neue News verfügbar: " + nutzer.notifications.news);
 
             /*
                 libProxer unterstützt die Nachrichten von Proxer über die News-Klasse. Darin enthalten ist die Funktion getNews(), die eine Liste der Artikel
@@ -60,7 +64,6 @@ namespace Demo
             {
                 Console.WriteLine(article.author + " schreibt: " + article.title);
             }
-
 
 
             Console.ReadKey();
