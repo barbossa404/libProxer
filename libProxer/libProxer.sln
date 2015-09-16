@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libProxer", "libProxer\libProxer.csproj", "{04E87EA7-5927-468F-A096-114A7DBE0466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{A8BAAC03-587D-4B56-95A0-DAC3228AC2D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04E87EA7-5927-468F-A096-114A7DBE0466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E87EA7-5927-468F-A096-114A7DBE0466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E87EA7-5927-468F-A096-114A7DBE0466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E87EA7-5927-468F-A096-114A7DBE0466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8BAAC03-587D-4B56-95A0-DAC3228AC2D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8BAAC03-587D-4B56-95A0-DAC3228AC2D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8BAAC03-587D-4B56-95A0-DAC3228AC2D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8BAAC03-587D-4B56-95A0-DAC3228AC2D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
