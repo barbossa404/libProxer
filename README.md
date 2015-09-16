@@ -7,6 +7,8 @@ Laufe der Zeit hinzu.
 *Benutzung:*
 Verweis auf libProxer hinzufügen zum Projekt. Für ein Walkthrough der Verwendung siehe Demo-Anwendung im Unterverzeichnis Demo.
 
+**libProxer ist auch als Nuget-Paket verfügbar, gleicher Name. Siehe https://www.nuget.org/packages/libProxer/.**
+
 *Features*:
  - Auslesen der Benachrichtigungen
  - Nachrichten mit Links zu Threads und Titelbildern
