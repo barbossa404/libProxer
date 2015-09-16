@@ -31,3 +31,5 @@ void printNews()
   }
 }
 ```
+
+Lizensiert unter den Bedigungen der MIT-Lizenz. Für mehr Details siehe Datei libProxer/LICENSE.
