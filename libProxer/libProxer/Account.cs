@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Numerics;
 using Newtonsoft.Json;
 
@@ -45,12 +46,12 @@ namespace libProxer
 
         private bool _loggedIn = false;
         private string _uid;
-        private string _sessionCookie;
+        private CookieContainer _sessionCookie;
 
         public Account(string _userName)
         {
             userName = _userName;
-            _sessionCookie = "";
+            _sessionCookie = new CookieContainer();
         }
 
         /**
@@ -65,7 +66,7 @@ namespace libProxer
             postParameter.Add("password", password);
 
             string jsonResponse = Network.loadURLPost("https://proxer.me/login?format=json&action=login", postParameter,
-                null, out _sessionCookie);
+                _sessionCookie);
 
             // Antwort auswerten
             LoginResponse antwort = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
@@ -94,7 +95,7 @@ namespace libProxer
         {
             if (forceOnline)
             {
-                string jsonResponse = Network.loadURLPost("https://proxer.me/login?format=json&action=login", null, _sessionCookie);
+                string jsonResponse = Network.loadURL("https://proxer.me/login?format=json&action=login", _sessionCookie);
 
                 // Antwort aus JSON zurückwandeln
                 LoginResponse antwort = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);

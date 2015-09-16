@@ -17,30 +17,19 @@ namespace libProxer
 {
     public static class Network
     {
-        public static string loadURL(string url, string sessionCookie = null)
+        public static string loadURL(string url, CookieContainer sessionCookie = null)
         {
             return loadURLPost(url, null, sessionCookie);
         }
 
-        public static string loadURL(string url, string sessionCookie, out string newSessionCookie)
-        {
-            return loadURLPost(url, null, sessionCookie, out newSessionCookie);
-        }
-
-        public static string loadURLPost(string url, Dictionary<string, string> postParams, string sessionCookie = null)
-        {
-            string cookie;
-            return loadURLPost(url, postParams, sessionCookie, out cookie);
-        }
-
-        public static string loadURLPost(string url, Dictionary<string,string> postParams, string sessionCookie, out string newSessionCookie)
+        public static string loadURLPost(string url, Dictionary<string,string> postParams, CookieContainer sessionCookie = null)
         {
             // Request erzeugen
             HttpWebRequest http = (HttpWebRequest)HttpWebRequest.Create(url);
             
             // Wenn es einen Cookie gibt, setzen wir ihn
             if (sessionCookie != null)
-                http.Headers[HttpRequestHeader.Cookie] = sessionCookie;
+                http.CookieContainer = sessionCookie;
 
             if (postParams != null)
             {
@@ -83,9 +72,6 @@ namespace libProxer
             var asyncResponse = http.GetResponseAsync();
             if (asyncResponse.Wait(1000) == false)
                 throw new IOException("No response for url " + url);
-
-            // Cookie zurückliefern
-            newSessionCookie = asyncResponse.Result.Headers["Set-Cookie"];
 
             // String lesen und zurückliefern
             using (StreamReader sr = new StreamReader(asyncResponse.Result.GetResponseStream()))
