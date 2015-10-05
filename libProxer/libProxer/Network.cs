@@ -54,7 +54,7 @@ namespace libProxer
 
                 // Verbindung zum Server aufbauen und Requeststream erhalten
                 var requestStreamAsync = http.GetRequestStreamAsync();
-                if (requestStreamAsync.Wait(1000) == false)
+                if (requestStreamAsync.Wait(3000) == false)
                     throw new IOException("Failed to send request for url " + url);
 
                 var requestStream = (Stream) requestStreamAsync.Result;
@@ -70,7 +70,7 @@ namespace libProxer
             // Antwort des Servers erfassen. Benutzung der Asynchronen-Methoden erforderlich um Kompabilität
             // zu allen Zielplattformen aufrechtzuerhalten
             var asyncResponse = http.GetResponseAsync();
-            if (asyncResponse.Wait(1000) == false)
+            if (asyncResponse.Wait(3000) == false)
                 throw new IOException("No response for url " + url);
 
             // String lesen und zurückliefern
