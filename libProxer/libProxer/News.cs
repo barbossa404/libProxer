@@ -13,16 +13,16 @@ using Newtonsoft.Json;
 
 namespace libProxer
 {
-    public class News
+    public static class News
     {
-        private ArticleList articles;
+        private static ArticleList articles;
 
-        public News()
+        static News()
         {
             articles = new ArticleList();
         }
 
-        public IEnumerable<Article> getNews()
+        public static IEnumerable<Article> getNews()
         {
             return articles;
         }

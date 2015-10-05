@@ -8,18 +8,14 @@
  * */
 
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Numerics;
 using Newtonsoft.Json;
-
 
 namespace libProxer
 {
 
-    public class Account
+    public static class Account
     {
         struct LoginResponse
         {
@@ -37,20 +33,20 @@ namespace libProxer
         }
 
         // Benutzername auf Proxer
-        public string userName;
+        public static string userName;
 
         // Benachrichtigungen für den aktuellen Benutzer.
         // Vorsicht: Wird nicht automatisch aktualisiert, dafür ist ein Aufruf von updateNotifications() notwendig.
-        public Notifications notifications;
+        public static Notifications notifications;
 
 
-        private bool _loggedIn = false;
-        private string _uid;
-        private CookieContainer _sessionCookie;
+        private static bool _loggedIn = false;
+        private static string _uid;
+        private static CookieContainer _sessionCookie;
 
-        public Account(string _userName)
+        static Account()
         {
-            userName = _userName;
+            userName = null;
             _sessionCookie = new CookieContainer();
         }
 
@@ -58,12 +54,15 @@ namespace libProxer
          * Meldet den Benutzer bei Proxer an. Eine Sitzung ist 60 Minuten gültig.
          * @param password: Passwort. Wird nicht innerhalb eines Accounts gespeichert.
          * */
-        public bool login(string password)
+        public static bool login(string _userName, string _password)
         {
+            // Benutzername übernehmen
+            userName = _userName;
+
             // Anfrage zusammenstellen
             var postParameter = new Dictionary<string, string>();
             postParameter.Add("username", userName);
-            postParameter.Add("password", password);
+            postParameter.Add("password", _password);
 
             string jsonResponse = Network.loadURLPost("https://proxer.me/login?format=json&action=login", postParameter,
                 _sessionCookie);
@@ -91,7 +90,7 @@ namespace libProxer
          * (Onlineprüfung erfolgt synchron und kann Verzögerungen nach sich ziehen.)
          * 
          */
-        public bool isLoggedIn(bool forceOnline = true)
+        public static bool isLoggedIn(bool forceOnline = true)
         {
             if (forceOnline)
             {
@@ -113,7 +112,7 @@ namespace libProxer
          * konnte oder bereits abgelaufen war.
          * 
          */
-        public bool logout()
+        public static bool logout()
         {
             // todo: Etwas machen hier^^
             _sessionCookie = null;
@@ -125,7 +124,7 @@ namespace libProxer
          * vorliegen. Ein Zugriff auf die geladenen Benachrichtigungen ist möglich über Account.Notifications.
          * Vorsicht: Diese werden nicht automatisch aktualisiert! 
          */
-        public bool updateNotifications()
+        public static bool updateNotifications()
         {
             string response = Network.loadURL("https://proxer.me/notifications?format=raw&s=count", _sessionCookie);
 
